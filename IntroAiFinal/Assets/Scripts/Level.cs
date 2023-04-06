@@ -12,7 +12,8 @@ public class Level
     
 
     public Grid<GridCell<bool>> Grid { get; private set; }
-   
+
+    public Level level;
     public Level(int maxWidth, int maxHeight)
     {
         _maxHeight = maxHeight;
@@ -37,6 +38,7 @@ public class Level
             if (!Grid.AreCoordsValid(newPlayerPosition, true)) continue;
             if (Grid.AreCoordsValid(newPlayerPosition)) {
                 Grid.Get(newPlayerPosition).Value = false;
+                Grid.Get(newPlayerPosition).isWalkable = false;
                 cellsToRemove--;
             }
             playerPosition = newPlayerPosition;

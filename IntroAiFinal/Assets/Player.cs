@@ -9,8 +9,11 @@ public class Player : MonoBehaviour
     float vertical;
 
     public float runSpeed = 20.0f;
+
+    public static Player instance;
     void Start()
     {
+        instance = this;
         body = GetComponent<Rigidbody2D>();
     }
 
@@ -24,5 +27,10 @@ public class Player : MonoBehaviour
     private void FixedUpdate()
     {
         body.velocity = new Vector2(horizontal * runSpeed, vertical * runSpeed);
+    }
+
+    public Vector3 getPlayerPosition()
+    {
+        return new Vector3(transform.position.x, transform.position.y);
     }
 }

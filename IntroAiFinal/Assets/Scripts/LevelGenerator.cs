@@ -15,12 +15,12 @@ public class LevelGenerator : MonoBehaviour
     [SerializeField] TileBase[] _wallTiles;
     [SerializeField] TileBase[] _groundTiles;
     //perameters
-    [SerializeField] int maxWidth;
-    [SerializeField] int maxHeight;
+    [SerializeField] public int maxWidth;
+    [SerializeField] public int maxHeight;
 
     [SerializeField] int _cellsToRemove;
 
-  
+    
 
     
     [ContextMenu("Generate Level")]
