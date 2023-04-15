@@ -1,132 +1,95 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public class Grid <T>
 {
-    public T[] Cells;
+    public T[,]gridArray;
     public int Width { get; }
     public int Height { get; }
 
-    public delegate T InitFunction(int x, int y);
-    public Grid(int width, int height)
+    private float cellSize;
+    private Vector3 originPosition;
+
+    public Grid(int width, int height, float cellSize, Vector3 originPosition, Func<Grid<T>, int, int, T> createGrid)
     {
-        Cells = new T[width * height];
-        Width = width;
-        Height = height;
+        this.Width = width;
+        this.Height = height;
+        this.cellSize = cellSize;
+        this.originPosition = originPosition;
+
+        gridArray = new T[width, height];
+
+        for (int x = 0; x < gridArray.GetLength(0); x++)
+        {
+            for (int y = 0; y < gridArray.GetLength(1); y++)
+            {
+                gridArray[x, y] = createGrid(this, x, y);
+            }
+        }
     }
 
-    public Grid(int width, int height, InitFunction init) : this(width, height)
+    
+    public Vector3 GetWorldPosition(int x, int y)
     {
-        for (var x = 0; x < width; x++)
+        return new Vector3(x, y) * cellSize + originPosition;
+    }
+
+    public void GetXY(Vector3 worldPosition, out int x, out int y)
+    {
+        x = Mathf.FloorToInt((worldPosition-originPosition).x / cellSize);
+        y = Mathf.FloorToInt((worldPosition-originPosition).y / cellSize);
+    }
+    public void SetValue(Vector3 worldPosition, T value)
+    {
+        int x, y;
+        GetXY(worldPosition, out x, out y);
+        SetValue(x, y, value);
+    }
+    
+    public void SetValue(int x, int y, T value)
+    {
+        if (x >= 0 && y >= 0 && x<Width && y<Height)
         {
-            for (var y = 0; y < height; y++)
-            {
-                Set(x, y, init(x, y));
-            }
+            gridArray[x, y] = value;
         }
         
     }
 
-    public int CoordsToIndex(int x, int y)
+    public T GetGridObject(int x, int y)
     {
-        return y * Width + x;
-    }
-
-    public Vector2Int indexToCoords(int index)
-    {
-        return new Vector2Int(index % Width, index / Width);
-    }
-
-    public int CoordsToIndex(Vector2Int coords)
-    {
-        return CoordsToIndex(coords.x, coords.y);
-    }
-
-    public void Set(int x, int y, T value)
-    {
-        Cells[CoordsToIndex(x, y)] = value;
-    }
-
-    public void Set(Vector2Int coords, T value)
-    {
-        Cells[CoordsToIndex(coords.x, coords.y)] = value;
-    }
-
-    public void Set(int index, T value)
-    {
-        Cells[index] = value;
-    }
-
-    public T Get(int x, int y)
-    {
-        return Cells[CoordsToIndex(x, y)];
-    }
-
-    public T Get(Vector2Int coords)
-    {
-       return Cells[CoordsToIndex(coords.x, coords.y)];
-    }
-
-    public T Get(int index)
-    {
-        return Cells[index];
-    }
-
-    public bool AreCoordsValid(int x, int y, bool safeWalls = false)
-    {
-        return safeWalls ? (x > 1 && x < Width -2 && y > 1 && y < Height -2) : 
-             (x >= 0 && y >= 0 && x < Width && y < Height);
-    }
-
-    public bool AreCoordsValid(Vector2Int coords, bool safeWalls = false)
-    {
-        return AreCoordsValid(coords.x, coords.y, safeWalls);
-    }
-
-    public Vector2Int GetCoords(T value)
-    {
-        var i = Array.IndexOf(Cells, value);
-
-        if (i == -1)
+        if (x >= 0 && y >= 0 && x < Width && y < Height)
         {
-            throw new ArgumentException();
+            return gridArray[x, y];
         }
-        return indexToCoords(i);
-    }
-
-    public List<T> GetNeighbors(Vector2Int coords, bool safeWalls = false)
-    {
-        var directions = (Direction[]) Enum.GetValues(typeof(Direction));
-               
-        
-        var neighbors = new List<T>();
-
-        foreach (var direction in directions)
+        else
         {
-            var neighborCoords = coords + direction.ToCooords();
-            if (AreCoordsValid(neighborCoords, safeWalls))
-            {
-                neighbors.Add(Get(coords));
-            }
+            return default(T);
         }
-        return neighbors;
     }
-    public List<T> GetBorders(Vector2Int coords, bool safeWalls = false)
+    public T GetGridObject(Vector3 worldPosition)
     {
-        var directions = (Direction[])Enum.GetValues(typeof(Direction));
-        var borders = new List<T>();
-
-        foreach (var direction in directions)
-        {
-            var borderCoords = coords + direction.ToCooords();
-            if (!AreCoordsValid(borderCoords, safeWalls))
-            {
-                borders.Add(Get(coords));
-            }
-        }
-        return borders;
+        int x, y;
+        GetXY(worldPosition, out x, out y);
+        return GetGridObject(x, y);
     }
+
+    public int GetWidth()
+    {
+        return this.Width;
+    }
+
+    public int GetHeight()
+    {
+        return this.Height;
+    }
+
+    public float GetCellSize()
+    {
+        return this.cellSize;
+    }
+ 
 }

@@ -9,30 +9,43 @@ public class Monster : MonoBehaviour
     private int currentPathIndex;
     private List<Vector3> pathVectorList;
     [SerializeField] int speed;
-    GameObject player;
-
+    Player player;
+    private Pathfinding pathfinding;
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player");
-        Debug.Log(player.transform.position);
+        player = Player.instance.GetComponent<Player>();
+        
+        pathfinding = new Pathfinding(25, 15);
         pathVectorList = new List<Vector3>();
-        SetTargetPosition(player.transform.position);
+
+
         
         
+
+
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        player = GameObject.FindGameObjectWithTag("Player");
-       
-        if (player != null)
+        player = Player.instance.GetComponent<Player>();
+        if (pathVectorList != null)
         {
-            
             //Movement();
-            
-
         }
+        
+
+        SetTargetPosition(player.transform.position);
+        
+
+
+
+
+    }
+    private void FixedUpdate()
+    {
+       
         
     }
 
@@ -40,26 +53,30 @@ public class Monster : MonoBehaviour
     {
         currentPathIndex = 0;
         pathVectorList = Pathfinding.Instance.FindPath(transform.position, targetPosition);
-
         Debug.Log(pathVectorList.Count);
+        
 
         if (pathVectorList != null && pathVectorList.Count > 1)
         {
             pathVectorList.RemoveAt(0);
+            Debug.Log(pathVectorList[0]);
         }
+
     }
     private void Movement()
     {
         if (pathVectorList != null)
         {
+            
             Vector3 targetPosition = pathVectorList[currentPathIndex];
             
             if (Vector3.Distance(transform.position, targetPosition) > 1f)
             {
                 Vector3 moveDir = (targetPosition - transform.position).normalized;
-
-                float distanceBefore = Vector3.Distance(transform.position, targetPosition);
-                transform.position = targetPosition + moveDir * speed *Time.deltaTime;
+                Debug.Log(transform.position);
+                Debug.Log(moveDir);
+                
+                transform.position = transform.position + moveDir * speed * Time.deltaTime;
 
             }
             else
@@ -67,11 +84,14 @@ public class Monster : MonoBehaviour
                 currentPathIndex++;
                 if (currentPathIndex >= pathVectorList.Count)
                 {
-                    StopMoving();
+                    pathVectorList = null;
                 }
             }
         }
-        
+        else
+        {
+            pathVectorList = null;
+        }    
     }
 
     private void StopMoving()

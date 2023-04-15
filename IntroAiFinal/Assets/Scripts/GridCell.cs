@@ -1,13 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml.XPath;
+using UnityEditor;
 using UnityEngine;
 
-public class GridCell<T>
+public class GridCell
 {
-    public int X { get; }
-    public int Y { get; }
-    public T Value { get; set; }
+    public Grid<GridCell> grid;
+    public int x;
+    public int y;
 
     public int gCost;
     public int hCost;
@@ -15,24 +16,17 @@ public class GridCell<T>
 
     public bool isWalkable;
 
-    public GridCell<T> cameFromNode;
-    public GridCell(int x, int y, T value)
+    public GridCell cameFromNode;
+    public GridCell(Grid<GridCell> grid, int x, int y)
     {
-        X = x;
-        Y = y;
-        Value = value;
+        this.grid = grid;
+        this.x = x;
+        this.y = y;
         isWalkable = true;
-    }
-
-    public GridCell<T> Get(int x, int y, T value)
-    {
-        return new GridCell<T>(x, y, value);
     }
 
     public void CalculateFCost()
     {
         fCost = gCost + hCost;
     }
-
-    
 }

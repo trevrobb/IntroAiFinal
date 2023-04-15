@@ -7,14 +7,15 @@ public class Player : MonoBehaviour
     Rigidbody2D body;
     float horizontal;
     float vertical;
-
+    Grid grid;
     public float runSpeed = 20.0f;
-
+    
     public static Player instance;
     void Start()
     {
         instance = this;
         body = GetComponent<Rigidbody2D>();
+        
     }
 
     // Update is called once per frame
@@ -22,6 +23,7 @@ public class Player : MonoBehaviour
     {
         horizontal = Input.GetAxisRaw("Horizontal");
         vertical = Input.GetAxisRaw("Vertical");
+        
     }
 
     private void FixedUpdate()
