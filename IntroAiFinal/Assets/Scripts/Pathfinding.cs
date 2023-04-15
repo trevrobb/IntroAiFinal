@@ -14,7 +14,7 @@ public class Pathfinding
     public static Pathfinding Instance;
     public Pathfinding(int width, int height)
     {
-        grid = new Grid<GridCell>(width, height, 10f, new Vector3(-19, -5), (Grid<GridCell> g, int x, int y) => new GridCell(g,x, y));
+        grid = new Grid<GridCell>(width, height, 12f, new Vector3(-19, -5), (Grid<GridCell> g, int x, int y) => new GridCell(g,x, y));
         Instance = this;
 
     }
@@ -38,7 +38,7 @@ public class Pathfinding
             List<Vector3> vectorPath = new List<Vector3>();
             foreach(GridCell cell in path)
             {
-                vectorPath.Add(new Vector3(cell.x, cell.y) * grid.GetCellSize() + Vector3.one * grid.GetCellSize() * .5f);
+                vectorPath.Add(new Vector3(cell.x, cell.y) );
             }
             return vectorPath;
         }
