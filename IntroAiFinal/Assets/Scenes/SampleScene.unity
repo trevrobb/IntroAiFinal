@@ -357,6 +357,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: key
       objectReference: {fileID: 0}
+    - target: {fileID: 9041519950557913592, guid: 97e3484ab228c524493a64c12321f0bf, type: 3}
+      propertyPath: m_SortingOrder
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 97e3484ab228c524493a64c12321f0bf, type: 3}
 --- !u!1 &533215269 stripped
@@ -403,6 +407,7 @@ GameObject:
   m_Component:
   - component: {fileID: 616494495}
   - component: {fileID: 616494496}
+  - component: {fileID: 616494497}
   m_Layer: 0
   m_Name: Visibility
   m_TagString: keyVis
@@ -441,6 +446,18 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
+--- !u!114 &616494497
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 616494494}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5ec522cb48c26245afcb1b12c65f24a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &635084656 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7947095959742144861, guid: 5850d164be2070542aeb45408918bde8, type: 3}
