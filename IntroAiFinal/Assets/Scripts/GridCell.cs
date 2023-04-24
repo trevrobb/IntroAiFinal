@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml.XPath;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class GridCell
 {
@@ -23,10 +25,17 @@ public class GridCell
         this.x = x;
         this.y = y;
         isWalkable = true;
+        
+        
     }
 
     public void CalculateFCost()
     {
         fCost = gCost + hCost;
+    }
+
+    public void setTiles()
+    {
+       
     }
 }

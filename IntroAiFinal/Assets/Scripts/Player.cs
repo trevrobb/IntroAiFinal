@@ -10,13 +10,14 @@ public class Player : MonoBehaviour
     float vertical;
     Grid grid;
     public float runSpeed = 20.0f;
+    private float time;
     
     public static Player instance;
     void Start()
     {
         instance = this;
         body = GetComponent<Rigidbody2D>();
-        
+        time = 0f;
     }
 
     // Update is called once per frame
@@ -24,7 +25,7 @@ public class Player : MonoBehaviour
     {
         horizontal = Input.GetAxisRaw("Horizontal");
         vertical = Input.GetAxisRaw("Vertical");
-        
+        time += Time.deltaTime;
     }
 
     private void FixedUpdate()
@@ -46,6 +47,7 @@ public class Player : MonoBehaviour
         }
         if (collision.gameObject.CompareTag("MonsterCollide"))
         {
+            Debug.Log("Monster found player in " + time + " seconds.");
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }

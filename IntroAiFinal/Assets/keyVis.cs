@@ -13,6 +13,10 @@ public class keyVis : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        GameObject key = GameObject.FindGameObjectWithTag("key");
+        if (key)
+        {
+            this.transform.position = key.transform.position;
+        }
     }
 }

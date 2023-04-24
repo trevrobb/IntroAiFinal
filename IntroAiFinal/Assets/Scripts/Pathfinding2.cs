@@ -1,7 +1,9 @@
+
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml.XPath;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class Pathfinding
 {
@@ -14,18 +16,28 @@ public class Pathfinding
     public static Pathfinding Instance;
     public Pathfinding(int width, int height)
     {
-        grid = new Grid<GridCell>(width, height, 12f, new Vector3(-19, -5), (Grid<GridCell> g, int x, int y) => new GridCell(g,x, y));
+        grid = new Grid<GridCell>(width, height, .5f, new Vector3(-9, -4), (Grid<GridCell> g, int x, int y) => new GridCell(g,x, y));
         Instance = this;
+        
 
     }
     public Grid<GridCell> GetGrid()
     {
         return this.grid;
     }
+    public void SetTiles()
+    {
+        
+                
+            
+        
+    }
     public List<Vector3> FindPath(Vector3 startWorldPosition, Vector3 endWorldPosition)
     {
+        Vector3 startPositionGrid = new Vector3(startWorldPosition.x - 10, startWorldPosition.y - 5);
         grid.GetXY(startWorldPosition, out int startX, out int startY);
         grid.GetXY(endWorldPosition, out int endX, out int endY);
+       
 
         List<GridCell> path = FindPath(startX, startY, endX, endY);
 
@@ -38,8 +50,11 @@ public class Pathfinding
             List<Vector3> vectorPath = new List<Vector3>();
             foreach(GridCell cell in path)
             {
-                vectorPath.Add(new Vector3(cell.x, cell.y) );
+               
+                vectorPath.Add(grid.GetWorldPosition(cell.x, cell.y));
+                
             }
+            
             return vectorPath;
         }
     }
@@ -50,7 +65,7 @@ public class Pathfinding
 
         openList = new List<GridCell> { startNode};
         closedList = new List<GridCell>();
-
+        
         for (int x = 0; x< grid.GetWidth(); x++)
         {
             for (int y = 0; y< grid.GetHeight(); y++)
@@ -83,7 +98,7 @@ public class Pathfinding
                     closedList.Add(neighbor);
                     continue;
                 }
-
+                
                 int tentativeGCost = currentNode.gCost + CalculateDistanceCost(currentNode, neighbor);
                 if (tentativeGCost < neighbor.gCost)
                 {
@@ -98,7 +113,10 @@ public class Pathfinding
                     }
                 }
             }
+       
+ 
         }
+        
         //no Path
         return null;
 

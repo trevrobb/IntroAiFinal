@@ -9,6 +9,7 @@ TagManager:
   - keyVis
   - Monster
   - MonsterCollide
+  - Tile
   layers:
   - Default
   - TransparentFX
