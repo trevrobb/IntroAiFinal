@@ -11,6 +11,7 @@ public class Player : MonoBehaviour
     Grid grid;
     public float runSpeed = 20.0f;
     private float time;
+    private bool keyFound;
     
     public static Player instance;
     void Start()
@@ -40,10 +41,11 @@ public class Player : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("keyVis"))
+        if (collision.gameObject.CompareTag("keyVis") && !keyFound)
         {
             GameObject key = GameObject.FindGameObjectWithTag("key");
             key.GetComponent<Renderer>().enabled = true;
+            keyFound = true;
         }
         if (collision.gameObject.CompareTag("MonsterCollide"))
         {

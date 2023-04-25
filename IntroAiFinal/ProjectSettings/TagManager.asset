@@ -10,6 +10,7 @@ TagManager:
   - Monster
   - MonsterCollide
   - Tile
+  - openCollide
   layers:
   - Default
   - TransparentFX

@@ -5,7 +5,7 @@ using System.Xml.XPath;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class Pathfinding
+public class Pathfinding2
 {
     private const int MOVE_STRAIGHT_COST = 10;
     private const int MOVE_DIAGONAL_COST = 14;
@@ -13,13 +13,12 @@ public class Pathfinding
     private List<GridCell> openList;
     private List<GridCell> closedList;
 
-    public static Pathfinding Instance;
-    public Pathfinding(int width, int height)
+    public static Pathfinding2 Instance;
+    public Pathfinding2(int width, int height)
     {
-        grid = new Grid<GridCell>(width, height, .5f, new Vector3(-9, -4), (Grid<GridCell> g, int x, int y) => new GridCell(g,x, y));
+        grid = new Grid<GridCell>(width, height, .5f, new Vector3(-10, -5), (Grid<GridCell> g, int x, int y) => new GridCell(g,x, y));
         Instance = this;
         
-
     }
     public Grid<GridCell> GetGrid()
     {

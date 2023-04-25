@@ -9,6 +9,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 using UnityEngine.UIElements;
+using Pathfinding;
 
 public class Monster : MonoBehaviour
 {
@@ -16,7 +17,7 @@ public class Monster : MonoBehaviour
     private List<Vector3> pathVectorList;
     [SerializeField] float speed;
     Vector3 playerPos;
-    private Pathfinding pathfinding;
+    private Pathfinding2 pathfinding;
     [SerializeField] Player player;
     Rigidbody2D rb;
 
@@ -34,34 +35,37 @@ public class Monster : MonoBehaviour
     void Start()
     {
 
-        if (SceneManager.GetActiveScene().buildIndex == 1) start.transform.position = this.transform.position;
+        if (SceneManager.GetActiveScene().buildIndex == 2) start.transform.position = this.transform.position;
 
 
 
-        pathfinding = new Pathfinding(45, 20);
+        pathfinding = new Pathfinding2(45, 20);
 
 
         rb = GetComponent<Rigidbody2D>();
 
-       
-        foreach (var pos in wallTilemap.cellBounds.allPositionsWithin)
+        if (SceneManager.GetActiveScene().buildIndex == 3)
         {
-
-            if (wallTilemap.HasTile(pos))
+            foreach (var pos in wallTilemap.cellBounds.allPositionsWithin)
             {
-                
-                if (pathfinding.GetGrid().GetGridObject(wallTilemap.CellToWorld(pos)) != null)
+
+                if (wallTilemap.HasTile(pos))
                 {
-                    GridCell c = pathfinding.GetGrid().GetGridObject(wallTilemap.CellToWorld(pos));
-                    c.isWalkable = false;
-                    Debug.DrawLine(new Vector3(wallTilemap.CellToWorld(pos).x, wallTilemap.CellToWorld(pos).y), new Vector3(wallTilemap.CellToWorld(pos).x + 1, wallTilemap.CellToWorld(pos).y), Color.red, 100f);
-                    Debug.DrawLine(new Vector3(wallTilemap.CellToWorld(pos).x, wallTilemap.CellToWorld(pos).y), new Vector3(wallTilemap.CellToWorld(pos).x, wallTilemap.CellToWorld(pos).y+1), Color.red, 100f);
+
+                    if (pathfinding.GetGrid().GetGridObject(wallTilemap.CellToWorld(pos)) != null)
+                    {
+                        GridCell c = pathfinding.GetGrid().GetGridObject(wallTilemap.CellToWorld(pos));
+                        c.isWalkable = false;
+                        Debug.DrawLine(new Vector3(wallTilemap.CellToWorld(pos).x, wallTilemap.CellToWorld(pos).y), new Vector3(wallTilemap.CellToWorld(pos).x + 1, wallTilemap.CellToWorld(pos).y), Color.red, 100f);
+                        Debug.DrawLine(new Vector3(wallTilemap.CellToWorld(pos).x, wallTilemap.CellToWorld(pos).y), new Vector3(wallTilemap.CellToWorld(pos).x, wallTilemap.CellToWorld(pos).y + 1), Color.red, 100f);
+
+                    }
 
                 }
-                
-            }
 
+            }
         }
+       
 
 
     }
@@ -73,7 +77,7 @@ public class Monster : MonoBehaviour
 
 
 
-        pathfinding = new Pathfinding(45, 20);
+        
 
 
 
@@ -83,23 +87,30 @@ public class Monster : MonoBehaviour
     private void FixedUpdate()
     {
 
-        if (SceneManager.GetActiveScene().buildIndex == 0)
-        {
-            //basicMovement();
-
-            SetTargetPosition(playerPos);
-            if (pathVectorList != null)
-            {
-                Movement();
-                
-            }
-
-        }
         if (SceneManager.GetActiveScene().buildIndex == 1)
+        {
+            basicMovement();
+
+            
+        }
+        if (SceneManager.GetActiveScene().buildIndex == 2)
         {
             start.transform.position = this.transform.position;
             end.transform.position = playerPos;
             Dij();
+        }
+
+        if (SceneManager.GetActiveScene().buildIndex == 3)
+        {
+            /*
+            SetTargetPosition(playerPos);
+
+            if (pathVectorList != null)
+            {
+                Movement();
+
+            }
+            */
         }
 
 
@@ -126,9 +137,9 @@ public class Monster : MonoBehaviour
 
             Vector3 targetPosition = pathVectorList[currentPathIndex];
 
-            if (Vector3.Distance(targetPosition, transform.position) > .001f)
+            if (Vector3.Distance(targetPosition, transform.position) > .01f)
             {
-                Vector3 moveDir = (targetPosition - transform.position);
+                Vector3 moveDir = (targetPosition - transform.position).normalized;
 
 
 
@@ -138,10 +149,7 @@ public class Monster : MonoBehaviour
             else
             {
                 currentPathIndex++;
-                if (currentPathIndex >= pathVectorList.Count)
-                {
-                    StopMoving();
-                }
+                
             }
 
 
@@ -158,7 +166,7 @@ public class Monster : MonoBehaviour
 
     private void basicMovement()
     {
-        rb.AddForce((playerPos - transform.position) * .5f);
+        rb.AddForce((playerPos - transform.position) * .01f, ForceMode2D.Impulse);
        
     }
 

@@ -67,8 +67,7 @@ public class Grid <T>
         
     }
 
-    public T GetGridObject(int x, int y)
-    {
+    public T GetGridObject(int x, int y)    {
         if (x >= 0 && y >= 0 && x < Width && y < Height)
         {
             return gridArray[x, y];
