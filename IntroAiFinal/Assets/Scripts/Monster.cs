@@ -9,7 +9,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 using UnityEngine.UIElements;
-using Pathfinding;
+
 
 public class Monster : MonoBehaviour
 {
@@ -17,7 +17,7 @@ public class Monster : MonoBehaviour
     private List<Vector3> pathVectorList;
     [SerializeField] float speed;
     Vector3 playerPos;
-    private Pathfinding2 pathfinding;
+    private Pathfinding pathfinding;
     [SerializeField] Player player;
     Rigidbody2D rb;
 
@@ -39,7 +39,7 @@ public class Monster : MonoBehaviour
 
 
 
-        pathfinding = new Pathfinding2(45, 20);
+        pathfinding = new Pathfinding(45, 20);
 
 
         rb = GetComponent<Rigidbody2D>();
@@ -102,7 +102,7 @@ public class Monster : MonoBehaviour
 
         if (SceneManager.GetActiveScene().buildIndex == 3)
         {
-            /*
+            
             SetTargetPosition(playerPos);
 
             if (pathVectorList != null)
@@ -110,7 +110,7 @@ public class Monster : MonoBehaviour
                 Movement();
 
             }
-            */
+            
         }
 
 
